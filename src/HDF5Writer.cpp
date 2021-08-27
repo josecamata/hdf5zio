@@ -9,20 +9,65 @@ using namespace std;
 
 #include "HDF5Writer.h"
 
-HDF5Writer::HDF5Writer(const char* fileName, bool isChuncked)
+HDF5Writer::HDF5Writer(const char* fileName)
 : HDF5Base(fileName) 
 {
-    this->isChuncked = isChuncked;
+    this->c = NOCOMPRESSION;
 }
 
 void HDF5Writer::write(int* dataBase, int size, const char* dSetName)
 {
-    if(isChuncked){
-        writeChuncked(dataBase, size, dSetName);
-    }
-    else if(!isChuncked){
+    switch (this->c)
+    {
+    case ZLIB:
+        /* code */
+        break;
+    case SZIP:
+        /**/
+        break;
+    default:
         writeNormal(dataBase, size, dSetName);
+        break;
     }
+}
+
+void HDF5Writer::write(float* dataBase, int size, const char* dSetName) 
+{
+    switch (this->c)
+    {
+    case ZLIB:
+        /* code */
+        break;
+    case SZIP:
+        /**/
+        break;
+    default:
+        writeNormal(dataBase, size, dSetName);
+        break;
+    }
+}
+
+void HDF5Writer::write(double* dataBase, int size, const char* dSetName) 
+{
+
+    switch (this->c)
+    {
+    case ZLIB:
+        /* code */
+        break;
+    case SZIP:
+        /**/
+        break;
+    default:
+        writeNormal(dataBase, size, dSetName);
+        break;
+    }
+
+}
+
+void HDF5Writer::setCompression(CompressionType c) 
+{
+    this->c = c;
 }
 
 void HDF5Writer::writeNormal(int* dataBase, int size, const char* dSetName) 
@@ -36,7 +81,7 @@ void HDF5Writer::writeNormal(int* dataBase, int size, const char* dSetName)
     fileId = H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
-    
+
     datasetId = H5Dcreate2(fileId, dSetName, H5T_NATIVE_INT, dataspaceId, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
     statusFileInTheFunction = H5Dwrite(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);

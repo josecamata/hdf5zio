@@ -1,7 +1,7 @@
 #ifndef F6158211_B632_4B28_83EE_11AA2B5C8C52
 #define F6158211_B632_4B28_83EE_11AA2B5C8C52
 
-#include "H5Cpp.h"
+#include "hdf5.h"
 
 class HDF5Base{
     public:
