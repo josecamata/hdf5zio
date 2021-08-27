@@ -5,13 +5,13 @@
 
 class HDF5Base{
     public:
-        HDF5Base(char* fileName);
+        HDF5Base(const char* fileName);
         void close();
     protected:
         char fileName[50];
         hid_t fileId;
-        int numOfDimensions;
-        void setNumberOfDimensions(int numberOfDimensions);
+        // int numOfDimensions;
+        // void setNumberOfDimensions(int numberOfDimensions);
     private:
 };
 
