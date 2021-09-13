@@ -20,7 +20,12 @@ class HDF5Writer: public HDF5Base{
         void writeNormal(float* dataBase, int size, const char* dSetName); //Write a float database
         void writeNormal(double* dataBase, int size, const char* dSetName); //Write a double database
         
-        void writeChuncked(int* dataBase, int size, const char* dSetName);
+        void writeChunckedSZIP(int* dataBase, int size, const char* dSetName);
+        void writeChunckedZLIB(int* dataBase, int size, const char* dSetName);
+        void writeChunckedSZIP(float* dataBase, int size, const char* dSetName);
+        void writeChunckedZLIB(float* dataBase, int size, const char* dSetName);
+        void writeChunckedSZIP(double* dataBase, int size, const char* dSetName);
+        void writeChunckedZLIB(double* dataBase, int size, const char* dSetName);
 };
 
 #endif /* C818BBCA_66C0_4F0E_8BC0_F207B9B4878C */

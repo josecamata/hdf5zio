@@ -10,8 +10,6 @@ class HDF5Base{
     protected:
         char fileName[50];
         hid_t fileId;
-        // int numOfDimensions;
-        // void setNumberOfDimensions(int numberOfDimensions);
     private:
 };
 

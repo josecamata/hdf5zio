@@ -7,7 +7,7 @@
 
 class HDF5Reader: public HDF5Base{
     public:
-    bool isChuncked;
+        bool isChuncked;
         HDF5Reader(const char* fileName);
         void read(const char *name, int* dataBase, int size, const char* dSetName);
         void read(const char *name, float* dataBase, int size, const char* dSetName);

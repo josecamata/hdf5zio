@@ -22,11 +22,15 @@ int main(void){
     }
 
     HDF5Writer myFile(name);
+    myFile.setCompression(ZLIB);
 
     myFile.write(database, tam, "hdyhdygd");
 
     myFile.close();
 
+    cout<<"Finished"<<endl;
+
+    /*
     HDF5Reader myFFF(name);
 
     int db[tam];
@@ -34,6 +38,6 @@ int main(void){
     myFFF.read(name, db, tam, "hdyhdygd");
 
     myFFF.close();
-
+    */
     return 0;
 }
