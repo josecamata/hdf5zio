@@ -142,7 +142,10 @@ void HDF5Writer::writeNormal(double* dataBase, int size, const char* dSetName)
 
 void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName) 
 {
-    
+    cout<<"Compressing "<< fileName <<"..."<<endl;
+
+
+    cout<<fileName<<" compressed."<<endl;
 }
 
 void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName) 
@@ -184,17 +187,22 @@ void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName
     statusFileInFunction = H5Sclose(dataspaceId);
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
+
     cout<<fileName<<" compressed."<<endl;
 }
 
 void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetName) 
 {
-    
+    cout<<"Compressing "<< fileName <<"..."<<endl;
+
+
+    cout<<fileName<<" compressed."<<endl;    
 }
 
 void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetName) 
 {
     cout<<"Compressing "<< fileName <<"..."<<endl;
+
     herr_t statusFileInFunction;
     hid_t datasetId;
     hid_t dataspaceId;
@@ -236,12 +244,16 @@ void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetNa
 
 void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetName) 
 {
-    
+    cout<<"Compressing "<< fileName <<"..."<<endl;
+
+
+    cout<<fileName<<" compressed."<<endl;    
 }
 
 void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetName) 
 {
     cout<<"Compressing "<< fileName <<"..."<<endl;
+
     herr_t statusFileInFunction;
     hid_t datasetId;
     hid_t dataspaceId;
