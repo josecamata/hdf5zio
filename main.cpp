@@ -14,17 +14,16 @@ int main(void){
     char name[] = "test.h5";
     int tam = 7;
 
-    int database[tam];
+    float database[tam];
 
     for(int i = 0; i < tam; i++){
-        cin>>database[i];
-        cout<<endl;
+        database[i] = i + 2 * 5 - 4;
     }
 
     HDF5Writer myFile(name);
-    myFile.setCompression(ZLIB);
+    myFile.setCompression(SZIP);
 
-    myFile.write(database, tam, "hdyhdygd");
+    myFile.write(database, tam, "Compression Test");
 
     myFile.close();
 
