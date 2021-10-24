@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 #include "HDF5Writer.h"
 
 HDF5Writer::HDF5Writer(const char* fileName)
@@ -278,7 +279,7 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
     cout<<"Until here"<<endl<<endl<<endl;
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
