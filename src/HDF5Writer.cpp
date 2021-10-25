@@ -178,7 +178,7 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
     szip_options_mask = H5_SZIP_NN_OPTION_MASK;
-    szip_pixels_per_block = 16;
+    szip_pixels_per_block = 2;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
     cout<<"Until here"<<endl<<endl<<endl;

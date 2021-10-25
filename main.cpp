@@ -11,8 +11,8 @@
 using namespace std;
 
 int main(void){
-    char name[] = "test.h5";
-    int tam = 7;
+    char name[] = "testZLIB.h5";
+    int tam = 4096;
 
     float database[tam];
 
@@ -21,22 +21,12 @@ int main(void){
     }
 
     HDF5Writer myFile(name);
-    myFile.setCompression(SZIP);
+    myFile.setCompression(ZLIB);
 
     myFile.write(database, tam, "Compression Test");
 
     myFile.close();
 
     cout<<"Finished"<<endl;
-
-    /*
-    HDF5Reader myFFF(name);
-
-    int db[tam];
-
-    myFFF.read(name, db, tam, "hdyhdygd");
-
-    myFFF.close();
-    */
     return 0;
 }
