@@ -12,6 +12,7 @@ using namespace std;
 #include "HDF5Reader.h"
 HDF5Reader::HDF5Reader(const char* fileName) : HDF5Base(fileName) 
 {
+    fileId = H5Fopen(fileName, H5F_ACC_RDWR, H5P_DEFAULT);
     //do nothing
 }
 
@@ -41,7 +42,7 @@ void HDF5Reader::readNormal(const char* name, int* dataBase, int size, const cha
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
     
-    fileId = H5Fopen(name, H5F_ACC_RDWR, H5P_DEFAULT);
+    
     datasetId = H5Dopen2(fileId, dSetName, H5P_DEFAULT);
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
@@ -58,8 +59,7 @@ void HDF5Reader::readNormal(const char* name, float* dataBase, int size, const c
 {
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
-    
-    fileId = H5Fopen(name, H5F_ACC_RDWR, H5P_DEFAULT);
+
     datasetId = H5Dopen2(fileId, dSetName, H5P_DEFAULT);
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
@@ -76,8 +76,7 @@ void HDF5Reader::readNormal(const char* name, double* dataBase, int size, const 
 {
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
-    
-    fileId = H5Fopen(name, H5F_ACC_RDWR, H5P_DEFAULT);
+
     datasetId = H5Dopen2(fileId, dSetName, H5P_DEFAULT);
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
