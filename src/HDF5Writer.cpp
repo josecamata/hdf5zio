@@ -168,8 +168,8 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
 
     int i, j, numfilt;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
     
 
@@ -214,8 +214,8 @@ void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName
     dims[0] = size;
     cdims[0] = size;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
     int i, j, numfilt;
 
@@ -263,8 +263,8 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
 
     int i, j, numfilt;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
 
@@ -308,8 +308,8 @@ void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetNa
     dims[0] = size;
     cdims[0] = size;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
     int i, j, numfilt;
 
@@ -357,8 +357,8 @@ void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetN
 
     int i, j, numfilt;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
@@ -406,8 +406,8 @@ void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetN
 
     int i, j, numfilt;
 
-    char newDSetName[85] = "Compressed_";
-    strcat(newDSetName,dSetName);
+    // char newDSetName[85] = "Compressed_";
+    // strcat(newDSetName,dSetName);
 
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
