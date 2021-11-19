@@ -15,6 +15,31 @@ cd hdf5-1.12.1
 ./configure --prefix=/opt/lib/hdf5 --enable-cxx --enable-c --with-szlib=/opt/lib/szip
 make
 sudo make install
+
+####
+## ZFP
+####
+git clone https://github.com/LLNL/zfp.git 
+cd zfp 
+#cat 'DEFS += -DBIT_STREAM_WORD_TYPE=uint8' >> Config 
+
+#Editar Config  descmentando a linha
+#  DEFS += -DBIT_STREAM_WORD_TYPE=uint8.
+make
+sudo mkdir /opt/lib/zfp
+sudo mv include /opt/lib/zfp 
+sudo mv lib /opt/lib/zfp 
+cd ..
+
+# 
+# PLUGIN ZFP
+#
+git clone  https://github.com/LLNL/H5Z-ZFP.git
+cd H5Z-ZFP 
+make CC=gcc ZFP_HOME=/opt/lib/zfp HDF5_HOME=/opt/lib/hdf5 PREFIX=/opt/lib/h5z_zfp 
+sudo make install
+
 cd ~
-rm -rf tmp_hdf5 
+
+
 
