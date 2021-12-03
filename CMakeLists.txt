@@ -9,6 +9,7 @@ file(GLOB source_files
     )
 add_executable(HDF5zio.exe ${source_files})
 
+# Variavel de ambiente HDF5_DIR ou HDF5_ROOT devem ser definidas
 find_package(HDF5 REQUIRED)
 find_package(MPI)
 include_directories(./include)
