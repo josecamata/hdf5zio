@@ -26,8 +26,8 @@ cp ../files/Config .
 make
 sudo mkdir /opt/lib/zfp
 sudo cp -r include /opt/lib/zfp 
-sudo cp -r lib /opt/lib/zfp/lib
-sudo cp Config /opt/lib/zfp 
+sudo cp -r lib     /opt/lib/zfp
+sudo cp Config     /opt/lib/zfp 
 cd ..
 
 # 
