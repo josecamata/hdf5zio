@@ -145,7 +145,6 @@ void HDF5Writer::writeNormal(double* dataBase, int size, const char* dSetName)
 
 void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -183,7 +182,7 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
     szip_pixels_per_block = 2;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_STD_I32BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_STD_I32BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -191,12 +190,12 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;
+
 }
 
 void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
+
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -227,7 +226,7 @@ void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
     statusFileInFunction = H5Pset_deflate(plistId, 6); //6 is the level of compression ("aggression")
 
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_STD_I32BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_STD_I32BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -235,12 +234,12 @@ void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;
+
 }
 
 void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
+
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -276,8 +275,7 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
     szip_pixels_per_block = 16;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
-    cout<<"Until here"<<endl<<endl<<endl;
-    datasetId = H5Dcreate(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -285,12 +283,12 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;    
+
 }
 
 void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
+
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -321,7 +319,7 @@ void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
     statusFileInFunction = H5Pset_deflate(plistId, 6); //6 is the level of compression ("aggression")
 
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -329,12 +327,12 @@ void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;
+
 }
 
 void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
+
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -371,8 +369,7 @@ void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetN
     szip_pixels_per_block = 16;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
-    cout<<"Until here"<<endl<<endl<<endl;
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -380,12 +377,12 @@ void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetN
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;    
+
 }
 
 void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetName) 
 {
-    cout<<"Compressing "<< fileName <<"..."<<endl;
+
 
     herr_t statusFileInFunction;
     hid_t datasetId;
@@ -417,7 +414,7 @@ void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetN
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
     statusFileInFunction = H5Pset_deflate(plistId, 6); //6 is the level of compression ("aggression")
 
-    datasetId = H5Dcreate2(fileId, newDSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
@@ -425,5 +422,5 @@ void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetN
     statusFileInFunction = H5Dclose(datasetId);
     statusFileInFunction = H5Pclose(plistId);
 
-    cout<<fileName<<" compressed."<<endl;
+
 }
