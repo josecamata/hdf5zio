@@ -5,6 +5,7 @@
 #include <string.h>
 #include <algorithm>
 #include "HDF5Writer.h"
+#include "HDF5Reader.h"
 //#include "HDF5Reader.h"
 
 using namespace std;
@@ -14,9 +15,9 @@ int main(void){
     char name0[] = "testNC.h5";
     char name1[] = "testSZIP.h5";
     char name2[] = "testZLIB.h5";
-    int tam = 100000000;
+    int tam = 1000;
 
-    float *database = new float[tam];
+    int *database = new int[tam];
 
     for(int i = 0; i < tam; i++){
         database[i] = i + 2 * 5 - 4;
@@ -33,7 +34,7 @@ int main(void){
 /**************************************************************/
 
     HDF5Writer myFile1(name1);
-    myFile1.setCompression(ZLIB);
+    myFile1.setCompression(SZIP);
 
     myFile1.write(database, tam, "Compression Test");
 
@@ -50,5 +51,10 @@ int main(void){
 
 /***************************************************************/
     cout<<"Finished"<<endl;
+
+    HDF5Reader myFile("testSZIP.h5");
+    int *databas = new int[tam];
+    myFile.read("testSZIP.h5", databas, tam, "Compression Test");
+
     return 0;
 }

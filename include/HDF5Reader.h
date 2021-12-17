@@ -17,7 +17,9 @@ class HDF5Reader: public HDF5Base{
         void readNormal(const char* name, int* dataBase, int size, const char* dSetName);
         void readNormal(const char* name, float* dataBase, int size, const char* dSetName);
         void readNormal(const char* name, double* dataBase, int size, const char* dSetName);
-        void readChuncked(const char* name);
+        void readChuncked(const char* name, double* dataBase, int size, const char* dSetName);
+        void readChuncked(const char* name, int* dataBase, int size, const char* dSetName);
+        void readChuncked(const char* name, float* dataBase, int size, const char* dSetName);
 };
 
 #endif /* CC1753F2_12F5_4673_AC11_5E0420BE3D5E */
