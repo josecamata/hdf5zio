@@ -9,7 +9,7 @@
 // Número de células nas dimensões X e Y
 #define NX 800
 #define NY 700
-void writeHdf5Data(CompressionType compression, char fileName[])
+void writeHdf5Data(CompressionType compression, char fileName[], int zfpmode=H5Z_ZFP_MODE_REVERSIBLE)
 {
     // Create the coordinate data.
     float *x = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
@@ -59,12 +59,12 @@ void writeHdf5Data(CompressionType compression, char fileName[])
     // Write the data file.
 
     /* Write separate coordinate arrays for the x and y coordinates. */
-    w.write(x, (NX + 1) * (NY + 1), "/X");
-    w.write(y, (NX + 1) * (NY + 1), "/Y");
+    w.write(x, (NX + 1) * (NY + 1), "/X", zfpmode);
+    w.write(y, (NX + 1) * (NY + 1), "/Y", zfpmode);
 
     // Write the scalar data.
-    w.write(pressure, NY * NX, "/Pressure");
-    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX");
+    w.write(pressure, NY * NX, "/Pressure", zfpmode);
+    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX", zfpmode);
 
     w.close();
 
@@ -114,7 +114,7 @@ void testeXdmf()
 {
     std::string temp;
     std::cout << "Defina a compressão:\n";
-    std::cout << "(NOCOMPRESSION, SZIP, ZLIB)\n";
+    std::cout << "(NOCOMPRESSION, SZIP, ZLIB, ZFP)\n";
     std::cin >> temp;
     if (temp == "NOCOMPRESSION") {
         writeHdf5Data(NOCOMPRESSION, "xdmf2d.h5");
@@ -124,8 +124,11 @@ void testeXdmf()
         writeHdf5Data(SZIP, "comSZIP.h5");
         writeXdmfXml("comSZIP.xmf", "comSZIP.h5");
     }
-    else {
+    else if (temp == "ZLIB") {
         writeHdf5Data(ZLIB, "comZLIB.h5");
         writeXdmfXml("comZLIB.xmf", "comZLIB.h5");
+    } else if (temp == "ZFP") {
+        writeHdf5Data(ZFP, "comZFP.h5");
+        writeXdmfXml("comZFP.xmf", "comZFP.h5");
     }
 }

@@ -4,10 +4,10 @@
 int main(void){
 
     // * Teste padrão de compressão 1:
-    testePadrao();
+    //testePadrao();
 
     // * Teste padrão de compressão 2 (com xdmf):
-    //testeXdmf();
+    testeXdmf();
 
     return 0;
 }
