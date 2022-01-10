@@ -2,5 +2,6 @@
     "files.associations": {
         "iostream": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": true
 }
