@@ -47,7 +47,8 @@ int main(void){
 
     myFile2.write(database, tam, "Compression Test");
 
-    myFile2.close();
+    // * Teste padrão de compressão 2 (com xdmf):
+    //testeXdmf();
 
 /***************************************************************/
     cout<<"Finished"<<endl;
