@@ -1,7 +1,12 @@
 {
     "files.associations": {
         "iostream": "cpp",
+<<<<<<< HEAD
         "algorithm": "cpp"
     },
     "cmake.configureOnOpen": true
+=======
+        "ostream": "cpp"
+    }
+>>>>>>> origin/Development2
 }

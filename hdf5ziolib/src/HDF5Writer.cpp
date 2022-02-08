@@ -166,8 +166,8 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
 
     int i, j, numfilt;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
     
 
@@ -212,8 +212,8 @@ void HDF5Writer::writeChunckedZLIB(int* dataBase, int size, const char* dSetName
     dims[0] = size;
     cdims[0] = size;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
     int i, j, numfilt;
 
@@ -261,8 +261,8 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
 
     int i, j, numfilt;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
 
@@ -274,6 +274,10 @@ void HDF5Writer::writeChunckedSZIP(float* dataBase, int size, const char* dSetNa
     szip_pixels_per_block = 16;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
+<<<<<<< HEAD:hdf5ziolib/src/HDF5Writer.cpp
+=======
+    cout<<"Until here"<<endl<<endl<<endl;
+>>>>>>> origin/Development2:src/HDF5Writer.cpp
     datasetId = H5Dcreate(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
@@ -305,8 +309,8 @@ void HDF5Writer::writeChunckedZLIB(float* dataBase, int size, const char* dSetNa
     dims[0] = size;
     cdims[0] = size;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
     int i, j, numfilt;
 
@@ -354,8 +358,8 @@ void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetN
 
     int i, j, numfilt;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
@@ -368,6 +372,10 @@ void HDF5Writer::writeChunckedSZIP(double* dataBase, int size, const char* dSetN
     szip_pixels_per_block = 16;
     statusFileInFunction = H5Pset_szip(plistId, szip_options_mask, szip_pixels_per_block);
 
+<<<<<<< HEAD:hdf5ziolib/src/HDF5Writer.cpp
+=======
+    cout<<"Until here"<<endl<<endl<<endl;
+>>>>>>> origin/Development2:src/HDF5Writer.cpp
     datasetId = H5Dcreate2(fileId, dSetName, H5T_IEEE_F64BE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
 
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
@@ -402,8 +410,8 @@ void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetN
 
     int i, j, numfilt;
 
-    // char newDSetName[85] = "Compressed_";
-    // strcat(newDSetName,dSetName);
+    // char dSetName[85] = "Compressed_";
+    // strcat(dSetName,dSetName);
 
 
     dataspaceId = H5Screate_simple(1, dims, NULL);
