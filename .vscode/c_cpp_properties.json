@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/hdf5/serial",
+                "/opt/lib/**",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/src"
             ],
