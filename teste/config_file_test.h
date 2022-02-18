@@ -18,7 +18,7 @@ void geracaoConfig(float* vect, int size){
     }
 }
 
-void config_file_test(int compression_type, int zfp_mode, uint prec){
+void config_file_test(){
 
     char zfpFileName[] = "test_config.h5";
 
@@ -30,13 +30,11 @@ void config_file_test(int compression_type, int zfp_mode, uint prec){
     geracaoConfig(database.get(), size);
     
     HDF5Writer zfpFile(zfpFileName);
-
-    zfpFile.setCompression((CompressionType) compression_type);
     
-    zfpFile.write(database.get(), size, "test_config", zfp_mode, prec);
+    zfpFile.write(database.get(), size, "test_config");
     zfpFile.close();
 
     std::cout << "Compression Type: " << zfpFile.compression() << "\n";
-    std::cout << "ZFP MODE: " << zfp_mode << "\n";
-    std::cout << "ZFP PRECISION: " << prec << "\n";
+    std::cout << "ZFP MODE: " << zfpFile.zfpmode() << "\n";
+    std::cout << "ZFP PRECISION: " << zfpFile.zfpprec() << "\n";
 }

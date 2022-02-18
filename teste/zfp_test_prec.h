@@ -30,8 +30,7 @@ void zfp_test_prec(){
     geracao2(database.get(), size);
     
     HDF5Writer zfpFile(zfpFileName);
-    zfpFile.setCompression(ZFP);
     
-    zfpFile.write(database.get(), size, "test_prec", H5Z_ZFP_MODE_PRECISION, (uint) 11);
+    zfpFile.write(database.get(), size, "test_prec");
     zfpFile.close();
 }

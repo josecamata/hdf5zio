@@ -9,14 +9,20 @@ class HDF5Writer: public HDF5Base{
     public:
         HDF5Writer(const char* fileName);
         void writeHDF5();
-        void write(int* dataBase, int size, const char* dSetName, int zfpmode=H5Z_ZFP_MODE_REVERSIBLE, uint prec=NULL);
-        void write(float* dataBase, int size, const char* dSetName, int zfpmode=H5Z_ZFP_MODE_REVERSIBLE, uint prec=NULL);
-        void write(double* dataBase, int size, const char* dSetName, int zfpmode=H5Z_ZFP_MODE_REVERSIBLE, uint prec=NULL);
+        void write(int* dataBase, int size, const char* dSetName);
+        void write(float* dataBase, int size, const char* dSetName);
+        void write(double* dataBase, int size, const char* dSetName);
         void setCompression(CompressionType c);
         CompressionType compression() { return this->c; };
+        int zfpmode() { return this->zfp_mode; };
+        uint zfpprec() { return this->zfp_prec; };
+
     private:
         CompressionType c;
-        
+
+        int zfp_mode;
+        uint zfp_prec;
+
         //Write functions:
         void writeNormal(int* dataBase, int size, const char* dSetNamex); //Write a integer database
         void writeNormal(float* dataBase, int size, const char* dSetName); //Write a float database
@@ -24,13 +30,13 @@ class HDF5Writer: public HDF5Base{
         
         void writeChunckedSZIP(int* dataBase, int size, const char* dSetName);
         void writeChunckedZLIB(int* dataBase, int size, const char* dSetName);
-        void writeChunckedZFP (int* dataBase, int size, const char* dSetName, int zfpmode, uint prec);
+        void writeChunckedZFP (int* dataBase, int size, const char* dSetName);
         void writeChunckedSZIP(float* dataBase, int size, const char* dSetName);
         void writeChunckedZLIB(float* dataBase, int size, const char* dSetName);
-        void writeChunckedZFP (float* dataBase, int size, const char* dSetName, int zfpmode, uint prec);
+        void writeChunckedZFP (float* dataBase, int size, const char* dSetName);
         void writeChunckedSZIP(double* dataBase, int size, const char* dSetName);
         void writeChunckedZLIB(double* dataBase, int size, const char* dSetName);
-        void writeChunckedZFP (double* dataBase, int size, const char* dSetName, int zfpmode, uint prec);
+        void writeChunckedZFP (double* dataBase, int size, const char* dSetName);
 
         void readConfigFile();
 };

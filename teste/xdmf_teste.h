@@ -9,10 +9,8 @@
 // Número de células nas dimensões X e Y
 #define NX 800
 #define NY 700
-void writeHdf5Data(int compression, char fileName[], int zfpmode, uint prec)
+void writeHdf5Data(char fileName[])
 {
-    std::cout << "\ncriando dados";
-    zfpmode = H5Z_ZFP_MODE_REVERSIBLE;
     // Create the coordinate data.
     float *x = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
     float *y = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
@@ -54,21 +52,18 @@ void writeHdf5Data(int compression, char fileName[], int zfpmode, uint prec)
             velocityx[ndx] = (float)i;
         }
     }
-    std::cout << "\ncriando arquivo";
         
     HDF5Writer w(fileName);
-    std::cout << "\nsetando compressao";
-    w.setCompression((CompressionType) compression);
 
     // Write the data file.
 
     /* Write separate coordinate arrays for the x and y coordinates. */
-    w.write(x, (NX + 1) * (NY + 1), "/X", zfpmode, prec);
-    w.write(y, (NX + 1) * (NY + 1), "/Y", zfpmode, prec);
+    w.write(x, (NX + 1) * (NY + 1), "/X");
+    w.write(y, (NX + 1) * (NY + 1), "/Y");
 
     // Write the scalar data.
-    w.write(pressure, NY * NX, "/Pressure", zfpmode, prec);
-    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX", zfpmode, prec);
+    w.write(pressure, NY * NX, "/Pressure");
+    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX");
 
     w.close();
 
@@ -114,8 +109,8 @@ void writeXdmfXml(char xmfFileName[], char h5FileName[])
     fclose(xmf);
 }
 
-void testeXdmf(int cType, int zfpmode, uint prec)
+void testeXdmf()
 {
-    writeHdf5Data(cType, "teste_xdmf.h5", zfpmode, prec);
+    writeHdf5Data("teste_xdmf.h5");
     writeXdmfXml("teste_xdmf.xmf", "teste_xdmf.h5");
 }

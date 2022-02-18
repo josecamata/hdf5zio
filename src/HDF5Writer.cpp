@@ -15,7 +15,7 @@ using namespace std;
 HDF5Writer::HDF5Writer(const char* fileName)
 : HDF5Base(fileName) 
 {
-    this->c = NOCOMPRESSION;
+    this->readConfigFile();
         
     fileId = H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 }
@@ -24,28 +24,29 @@ void HDF5Writer::readConfigFile() {
 
     // Find config file
     std::ofstream configFile;
-    configFile.open("./config/config.pot");
+    configFile.open("../config/config.pot", ios::app);
     if (!configFile.is_open()) {
         std::cerr << "\nCreating default config file . . .\n";
-
+        // TODO : Implementar criação de arquivo config
+        std::cerr << "\nNot yet implemented\n";
     }
     configFile.close();
 
-    GetPot ifile("../config/config2.pot");
+    GetPot ifile("../config/config.pot");
 
     int ct = ifile("compression_type", 0);
+    this->c = (CompressionType) ct;
 
-    if (ct == 3) { // ZFP
-        zfp_mode = ifile("zfp_mode", 5);
+    if (this->c == ZFP) { // ZFP
+        this->zfp_mode = ifile("zfp_mode", 5);
 
-        if (zfp_mode == 2) { // zfp mode precision
-            prec = ifile("zfp_precision", 5);
+        if (this->zfp_mode == 2) { // zfp mode precision
+            this->zfp_prec = ifile("zfp_precision", 5);
         }
     }
-
 }
 
-void HDF5Writer::write(int* dataBase, int size, const char* dSetName, int zfpmode, uint prec)
+void HDF5Writer::write(int* dataBase, int size, const char* dSetName)
 {
     switch (this->c)
     {
@@ -56,7 +57,7 @@ void HDF5Writer::write(int* dataBase, int size, const char* dSetName, int zfpmod
         writeChunckedSZIP(dataBase, size, dSetName);
         break;
     case ZFP:
-        writeChunckedZFP(dataBase, size, dSetName, zfpmode, prec);
+        writeChunckedZFP(dataBase, size, dSetName);
         break;
     default:
         writeNormal(dataBase, size, dSetName);
@@ -64,7 +65,7 @@ void HDF5Writer::write(int* dataBase, int size, const char* dSetName, int zfpmod
     }
 }
 
-void HDF5Writer::write(float* dataBase, int size, const char* dSetName, int zfpmode, uint prec) 
+void HDF5Writer::write(float* dataBase, int size, const char* dSetName) 
 {
     switch (this->c)
     {
@@ -75,7 +76,7 @@ void HDF5Writer::write(float* dataBase, int size, const char* dSetName, int zfpm
         writeChunckedSZIP(dataBase, size, dSetName);
         break;
     case ZFP:
-        writeChunckedZFP(dataBase, size, dSetName, zfpmode, prec);
+        writeChunckedZFP(dataBase, size, dSetName);
         break;
     default:
         writeNormal(dataBase, size, dSetName);
@@ -83,7 +84,7 @@ void HDF5Writer::write(float* dataBase, int size, const char* dSetName, int zfpm
     }
 }
 
-void HDF5Writer::write(double* dataBase, int size, const char* dSetName, int zfpmode, uint prec) 
+void HDF5Writer::write(double* dataBase, int size, const char* dSetName) 
 {
 
     switch (this->c)
@@ -95,7 +96,7 @@ void HDF5Writer::write(double* dataBase, int size, const char* dSetName, int zfp
         writeChunckedSZIP(dataBase, size, dSetName);
         break;
     case ZFP:
-        writeChunckedZFP(dataBase, size, dSetName, zfpmode, prec);
+        writeChunckedZFP(dataBase, size, dSetName);
         break;
     default:
         writeNormal(dataBase, size, dSetName);
@@ -229,7 +230,7 @@ void HDF5Writer::writeChunckedSZIP(int* dataBase, int size, const char* dSetName
 
 }
 
-void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName, int zfpmode, uint prec)
+void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName)
 {
     hid_t plistId;
     hid_t dataspaceId;
@@ -248,10 +249,13 @@ void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName,
 
     H5Z_zfp_initialize();
 
-    if (zfpmode == H5Z_ZFP_MODE_REVERSIBLE) {
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
-    } else if (zfpmode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, prec);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
     }
 
     dataspaceId = H5Screate_simple(1, dims, 0);
@@ -266,7 +270,7 @@ void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName,
     statusFileInFunction = H5Pclose(plistId);
 }
 
-void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetName, int zfpmode, uint prec)
+void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetName)
 {
     hid_t plistId;
     hid_t dataspaceId;
@@ -284,10 +288,13 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
 
     H5Z_zfp_initialize();
 
-    if (zfpmode == H5Z_ZFP_MODE_REVERSIBLE) {
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
-    } else if (zfpmode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, prec);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
     }
 
     dataspaceId = H5Screate_simple(1, dims, 0);
@@ -302,7 +309,7 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
     statusFileInFunction = H5Pclose(plistId);
 }
 
-void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetName, int zfpmode, uint prec) 
+void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetName) 
 {
     hid_t plistId;
     hid_t dataspaceId;
@@ -321,10 +328,13 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
 
     H5Z_zfp_initialize();
 
-    if (zfpmode == H5Z_ZFP_MODE_REVERSIBLE) {
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
-    } else if (zfpmode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, prec);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
     }
 
     dataspaceId = H5Screate_simple(1, dims, 0);
