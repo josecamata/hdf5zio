@@ -12,6 +12,7 @@ add_executable(HDF5zio.exe ${source_files})
 find_package(HDF5 REQUIRED)
 find_package(MPI)
 include_directories(./include)
+
 include_directories(/opt/lib/h5z_zfp/include)
 if(HDF5_FOUND)
     include_directories(${HDF5_INCLUDE_DIRS})

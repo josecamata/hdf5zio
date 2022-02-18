@@ -9,8 +9,10 @@
 // Número de células nas dimensões X e Y
 #define NX 800
 #define NY 700
-void writeHdf5Data(CompressionType compression, char fileName[], int zfpmode=H5Z_ZFP_MODE_REVERSIBLE)
+void writeHdf5Data(int compression, char fileName[], int zfpmode, uint prec)
 {
+    std::cout << "\ncriando dados";
+    zfpmode = H5Z_ZFP_MODE_REVERSIBLE;
     // Create the coordinate data.
     float *x = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
     float *y = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
@@ -52,19 +54,21 @@ void writeHdf5Data(CompressionType compression, char fileName[], int zfpmode=H5Z
             velocityx[ndx] = (float)i;
         }
     }
-
+    std::cout << "\ncriando arquivo";
+        
     HDF5Writer w(fileName);
-    w.setCompression(compression);
+    std::cout << "\nsetando compressao";
+    w.setCompression((CompressionType) compression);
 
     // Write the data file.
 
     /* Write separate coordinate arrays for the x and y coordinates. */
-    w.write(x, (NX + 1) * (NY + 1), "/X", zfpmode);
-    w.write(y, (NX + 1) * (NY + 1), "/Y", zfpmode);
+    w.write(x, (NX + 1) * (NY + 1), "/X", zfpmode, prec);
+    w.write(y, (NX + 1) * (NY + 1), "/Y", zfpmode, prec);
 
     // Write the scalar data.
-    w.write(pressure, NY * NX, "/Pressure", zfpmode);
-    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX", zfpmode);
+    w.write(pressure, NY * NX, "/Pressure", zfpmode, prec);
+    w.write(velocityx, (NX + 1) * (NY + 1), "/VelocityX", zfpmode, prec);
 
     w.close();
 
@@ -87,20 +91,20 @@ void writeXdmfXml(char xmfFileName[], char h5FileName[])
     fprintf(xmf, "   <Grid Name=\"mesh1\" GridType=\"Uniform\">\n");
     fprintf(xmf, "     <Topology TopologyType=\"2DSMesh\" NumberOfElements=\"%d %d\"/>\n", NY + 1, NX + 1);
     fprintf(xmf, "     <Geometry GeometryType=\"X_Y\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", (NY + 1), (NX + 1));
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", (NY + 1), (NX + 1));
     fprintf(xmf, "        %s:/X\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", (NY + 1), (NX + 1));
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", (NY + 1), (NX + 1));
     fprintf(xmf, "        %s:/Y\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Geometry>\n");
     fprintf(xmf, "     <Attribute Name=\"Pressure\" AttributeType=\"Scalar\" Center=\"Cell\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", NY, NX);
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", NY, NX);
     fprintf(xmf, "        %s:/Pressure\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Attribute>\n");
     fprintf(xmf, "     <Attribute Name=\"VelocityX\" AttributeType=\"Scalar\" Center=\"Node\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", NY + 1, NX + 1);
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", NY + 1, NX + 1);
     fprintf(xmf, "        %s:/VelocityX\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Attribute>\n");
@@ -110,25 +114,8 @@ void writeXdmfXml(char xmfFileName[], char h5FileName[])
     fclose(xmf);
 }
 
-void testeXdmf()
+void testeXdmf(int cType, int zfpmode, uint prec)
 {
-    std::string temp;
-    std::cout << "Defina a compressão:\n";
-    std::cout << "(NOCOMPRESSION, SZIP, ZLIB, ZFP)\n";
-    std::cin >> temp;
-    if (temp == "NOCOMPRESSION") {
-        writeHdf5Data(NOCOMPRESSION, "xdmf2d.h5");
-        writeXdmfXml("xdmf2d.xmf", "xdmf2d.h5");
-    }
-    else if (temp == "SZIP") {
-        writeHdf5Data(SZIP, "comSZIP.h5");
-        writeXdmfXml("comSZIP.xmf", "comSZIP.h5");
-    }
-    else if (temp == "ZLIB") {
-        writeHdf5Data(ZLIB, "comZLIB.h5");
-        writeXdmfXml("comZLIB.xmf", "comZLIB.h5");
-    } else if (temp == "ZFP") {
-        writeHdf5Data(ZFP, "comZFP.h5");
-        writeXdmfXml("comZFP.xmf", "comZFP.h5");
-    }
+    writeHdf5Data(cType, "teste_xdmf.h5", zfpmode, prec);
+    writeXdmfXml("teste_xdmf.xmf", "teste_xdmf.h5");
 }
