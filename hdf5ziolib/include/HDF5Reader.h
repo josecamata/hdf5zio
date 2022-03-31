@@ -1,5 +1,5 @@
-#ifndef CC1753F2_12F5_4673_AC11_5E0420BE3D5E
-#define CC1753F2_12F5_4673_AC11_5E0420BE3D5E
+#ifndef HDF5READER_H
+#define HDF5READER_H
 
 #include "HDF5Base.h"
 
@@ -22,4 +22,4 @@ class HDF5Reader: public HDF5Base{
         void readChuncked(const char* name, float* dataBase, int size, const char* dSetName);
 };
 
-#endif /* CC1753F2_12F5_4673_AC11_5E0420BE3D5E */
+#endif /* HDF5READER_H */

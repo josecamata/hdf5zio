@@ -1,5 +1,5 @@
-#ifndef BE6A052D_EB4E_48B2_B69D_3C892204ED82
-#define BE6A052D_EB4E_48B2_B69D_3C892204ED82
+#ifndef SORTING_H
+#define SORTING_H
 
 #include <iostream>
 #include <math.h>
@@ -51,4 +51,4 @@ void heapSort(T *array, int n){
         maxHeapify(array, 0, i);
     }
 }
-#endif /* BE6A052D_EB4E_48B2_B69D_3C892204ED82 */
+#endif /* SORTING_H */
