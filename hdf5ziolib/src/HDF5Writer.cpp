@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 #include "HDF5Writer.h"
 
 HDF5Writer::HDF5Writer(const char* fileName)

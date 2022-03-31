@@ -9,7 +9,7 @@
 // Número de células nas dimensões X e Y
 #define NX 800
 #define NY 700
-void writeHdf5Data(CompressionType compression, char fileName[])
+void writeHdf5Data(CompressionType compression, const char fileName[])
 {
     // Create the coordinate data.
     float *x = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
@@ -75,7 +75,7 @@ void writeHdf5Data(CompressionType compression, char fileName[])
     free(velocityx);
 }
 
-void writeXdmfXml(char xmfFileName[], char h5FileName[])
+void writeXdmfXml(const char xmfFileName[], const char h5FileName[])
 {
     FILE *xmf = 0;
     xmf = fopen(xmfFileName, "w");
