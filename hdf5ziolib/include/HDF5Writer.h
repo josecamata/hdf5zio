@@ -13,18 +13,13 @@ class HDF5Writer: public HDF5Base{
         void write(float* dataBase, int size, const char* dSetName);
         void write(double* dataBase, int size, const char* dSetName);
         void setCompression(CompressionType c);
-        CompressionType compression() { return this->c; };
-        int zfpmode() { return this->zfp_mode; };
-        uint zfpprec() { return this->zfp_prec; };
-
     private:
         CompressionType c;
 
         int zfp_mode;
         uint zfp_prec;
-
         //Write functions:
-        void writeNormal(int* dataBase, int size, const char* dSetNamex); //Write a integer database
+        void writeNormal(int* dataBase, int size, const char* dSetName); //Write a integer database
         void writeNormal(float* dataBase, int size, const char* dSetName); //Write a float database
         void writeNormal(double* dataBase, int size, const char* dSetName); //Write a double database
         

@@ -1,25 +1,60 @@
-#include "teste/joao_teste.h"
-#include "teste/xdmf_teste.h"
-#include "teste/zfp_test.h"
-#include "teste/zfp_test_prec.h"
-#include "teste/config_file_test.h"
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <string>
+#include <string.h>
+#include <algorithm>
+#include "HDF5Writer.h"
+#include "HDF5Reader.h"
+//#include "HDF5Reader.h"
 
-int main(int argc, char** argv){
+using namespace std;
 
-    // * Teste padrão de compressão 1:
-    //testePadrao();
+int main(void){
 
-    // * Teste padrão de compressão 2 (com xdmf):
-    //testeXdmf();
+    char name0[] = "testNC.h5";
+    char name1[] = "testSZIP.h5";
+    char name2[] = "testZLIB.h5";
+    int tam = 1000;
 
-    // * Teste padrão de compressão 3 (zfp):
-    //zfp_test();
+    int *database = new int[tam];
 
-    // * Teste padrão de compressão 4 (zfp com precision 5)
-    //zfp_test_prec();
+    for(int i = 0; i < tam; i++){
+        database[i] = i + 2 * 5 - 4;
+    }
+/**************************************************************/
 
-    // * Teste padrão de compressão 5 (config file)
-    config_file_test();
+    HDF5Writer myFile0(name0);
+    myFile0.setCompression(NOCOMPRESSION);
+
+    myFile0.write(database, tam, "Compression Test");
+
+    myFile0.close();
+
+/**************************************************************/
+
+    HDF5Writer myFile1(name1);
+    myFile1.setCompression(SZIP);
+
+    myFile1.write(database, tam, "Compression Test");
+
+    myFile1.close();
+
+/**************************************************************/
+
+    HDF5Writer myFile2(name2);
+    myFile2.setCompression(ZLIB);
+
+    myFile2.write(database, tam, "Compression Test");
+
+    myFile2.close();
+
+/***************************************************************/
+    cout<<"Finished"<<endl;
+
+    HDF5Reader myFile("testSZIP.h5");
+    int *databas = new int[tam];
+    myFile.read("testSZIP.h5", databas, tam, "Compression Test");
 
     return 0;
 }

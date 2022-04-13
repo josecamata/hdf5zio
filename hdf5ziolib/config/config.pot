@@ -3,5 +3,5 @@
 compression_type = 3;
 
 # ZFP MODES: 5 (REVERSIBLE) OR 2 (PRECISION MODE)
-zfp_mode = 5;
+zfp_mode = 2;
 zfp_precision = 4;

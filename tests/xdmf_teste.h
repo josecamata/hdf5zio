@@ -9,7 +9,7 @@
 // Número de células nas dimensões X e Y
 #define NX 800
 #define NY 700
-void writeHdf5Data(char fileName[])
+void writeHdf5Data(CompressionType compression, const char fileName[])
 {
     // Create the coordinate data.
     float *x = (float *)malloc((NX + 1) * (NY + 1) * sizeof(float));
@@ -52,8 +52,9 @@ void writeHdf5Data(char fileName[])
             velocityx[ndx] = (float)i;
         }
     }
-        
+
     HDF5Writer w(fileName);
+    w.setCompression(compression);
 
     // Write the data file.
 
@@ -74,7 +75,7 @@ void writeHdf5Data(char fileName[])
     free(velocityx);
 }
 
-void writeXdmfXml(char xmfFileName[], char h5FileName[])
+void writeXdmfXml(const char xmfFileName[], const char h5FileName[])
 {
     FILE *xmf = 0;
     xmf = fopen(xmfFileName, "w");
@@ -86,20 +87,20 @@ void writeXdmfXml(char xmfFileName[], char h5FileName[])
     fprintf(xmf, "   <Grid Name=\"mesh1\" GridType=\"Uniform\">\n");
     fprintf(xmf, "     <Topology TopologyType=\"2DSMesh\" NumberOfElements=\"%d %d\"/>\n", NY + 1, NX + 1);
     fprintf(xmf, "     <Geometry GeometryType=\"X_Y\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", (NY + 1), (NX + 1));
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", (NY + 1), (NX + 1));
     fprintf(xmf, "        %s:/X\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", (NY + 1), (NX + 1));
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", (NY + 1), (NX + 1));
     fprintf(xmf, "        %s:/Y\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Geometry>\n");
     fprintf(xmf, "     <Attribute Name=\"Pressure\" AttributeType=\"Scalar\" Center=\"Cell\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", NY, NX);
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", NY, NX);
     fprintf(xmf, "        %s:/Pressure\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Attribute>\n");
     fprintf(xmf, "     <Attribute Name=\"VelocityX\" AttributeType=\"Scalar\" Center=\"Node\">\n");
-    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"ZFP\">\n", NY + 1, NX + 1);
+    fprintf(xmf, "       <DataItem Dimensions=\"%d %d\" NumberType=\"Float\" Precision=\"4\" Format=\"HDF\">\n", NY + 1, NX + 1);
     fprintf(xmf, "        %s:/VelocityX\n", h5FileName);
     fprintf(xmf, "       </DataItem>\n");
     fprintf(xmf, "     </Attribute>\n");
@@ -111,6 +112,20 @@ void writeXdmfXml(char xmfFileName[], char h5FileName[])
 
 void testeXdmf()
 {
-    writeHdf5Data("teste_xdmf.h5");
-    writeXdmfXml("teste_xdmf.xmf", "teste_xdmf.h5");
+    std::string temp;
+    std::cout << "Defina a compressão:\n";
+    std::cout << "(NOCOMPRESSION, SZIP, ZLIB)\n";
+    std::cin >> temp;
+    if (temp == "NOCOMPRESSION") {
+        writeHdf5Data(NOCOMPRESSION, "xdmf2d.h5");
+        writeXdmfXml("xdmf2d.xmf", "xdmf2d.h5");
+    }
+    else if (temp == "SZIP") {
+        writeHdf5Data(SZIP, "comSZIP.h5");
+        writeXdmfXml("comSZIP.xmf", "comSZIP.h5");
+    }
+    else {
+        writeHdf5Data(ZLIB, "comZLIB.h5");
+        writeXdmfXml("comZLIB.xmf", "comZLIB.h5");
+    }
 }

@@ -49,6 +49,7 @@
         "limits": "cpp",
         "stdexcept": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "codecvt": "cpp"
     }
 }

@@ -1,20 +1,24 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
+cmake_policy(SET CMP0057 NEW)
+set(CMAKE_CXX_STANDARD 14)
 
-project(HDF5zio)
-file(GLOB source_files
-            "*.h"
-            "*.cpp"
-            "src/*.cpp"
-            "include/*.h"
-    )
-add_executable(HDF5zio.exe ${source_files})
+project(hdf5zio)
 
 find_package(HDF5 REQUIRED)
 find_package(MPI)
-include_directories(./include)
 
-include_directories(/opt/lib/h5z_zfp/include)
 if(HDF5_FOUND)
-    include_directories(${HDF5_INCLUDE_DIRS})
-    target_link_libraries(HDF5zio.exe PUBLIC ${HDF5_C_LIBRARIES} /opt/lib/h5z_zfp/lib/libh5zzfp.a /opt/lib/h5z_zfp/plugin/libh5zzfp.so) 
+include_directories(${HDF5_INCLUDE_DIRS})
 endif()
+
+include_directories(${CMAKE_SOURCE_DIR}/hdf5ziolib/include)
+include_directories(/opt/lib/h5z_zfp/include)
+# Build the library
+add_subdirectory(hdf5ziolib)
+add_subdirectory(tests)
+#add_executable(HDF5zio-test tests/main.cpp)
+#target_link_libraries(HDF5zio-test PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
+
+
+
+
