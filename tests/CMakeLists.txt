@@ -7,9 +7,8 @@ add_executable(hurricane hurricane.cpp)
 
 include_directories(${HDF5_INCLUDE_DIRS})
 
-target_link_libraries(write_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
-target_link_libraries(read_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
-target_link_libraries(xdmf_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
-
-target_link_libraries(hurricane PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
+target_link_libraries(write_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES} ${ZFP_LIBRARIES} ${H5ZZFP_LIBRARY})
+target_link_libraries(read_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES} ${ZFP_LIBRARIES} ${H5ZZFP_LIBRARY} )
+target_link_libraries(xdmf_test PUBLIC HDF5zio ${HDF5_C_LIBRARIES} ${ZFP_LIBRARIES} ${H5ZZFP_LIBRARY} )
+target_link_libraries(hurricane PUBLIC HDF5zio ${HDF5_C_LIBRARIES} ${ZFP_LIBRARIES} ${H5ZZFP_LIBRARY} )
 

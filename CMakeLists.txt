@@ -6,9 +6,27 @@ project(hdf5zio)
 
 find_package(HDF5 REQUIRED)
 find_package(MPI)
+find_package(ZFP)
+
+include(CheckFortranCompilerFlag)
+
+option(USE_ZFP "Use ZFP compression" ON)
+
 
 if(HDF5_FOUND)
-include_directories(${HDF5_INCLUDE_DIRS})
+  include_directories(${HDF5_INCLUDE_DIRS})
+endif()
+
+if(ZFP_FOUND)
+  if(H5ZZFP_DIR)
+    set(H5ZZFP_INCLUDE_DIR ${H5ZZFP_DIR}/include)
+    set(H5ZZFP_LIBRARY ${H5ZZFP_DIR}/lib/libh5zzfp.a)
+    include_directories(${H5ZZFP_INCLUDE_DIR})
+   else()
+    message(FATAL_ERROR "H5ZZFP_DIR not set")
+   endif()
+  
+    include_directories(${ZFP_INCLUDE_DIRS})
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/hdf5ziolib/include)

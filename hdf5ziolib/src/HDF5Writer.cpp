@@ -459,3 +459,122 @@ void HDF5Writer::writeChunckedZLIB(double* dataBase, int size, const char* dSetN
 
 
 }
+
+void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName)
+{
+    hid_t plistId;
+    hid_t dataspaceId;
+    hid_t datasetId;
+    herr_t statusFileInFunction;
+
+    hsize_t dims[1];
+    hsize_t cdims[1];
+
+    dims[0] = size;
+    cdims[0] = size;
+
+
+    plistId = H5Pcreate(H5P_DATASET_CREATE);
+    statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
+
+    H5Z_zfp_initialize();
+
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
+        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
+    }
+
+    dataspaceId = H5Screate_simple(1, dims, 0);
+
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_NATIVE_INT, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
+    statusFileInFunction = H5Dclose(datasetId);
+
+    H5Z_zfp_finalize();
+
+    statusFileInFunction = H5Sclose(dataspaceId);
+    statusFileInFunction = H5Pclose(plistId);
+}
+
+void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetName)
+{
+    hid_t plistId;
+    hid_t dataspaceId;
+    hid_t datasetId;
+    herr_t statusFileInFunction;
+
+    hsize_t dims[1];
+    hsize_t cdims[1];
+
+    dims[0] = size;
+    cdims[0] = size;
+
+    plistId = H5Pcreate(H5P_DATASET_CREATE);
+    statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
+
+    H5Z_zfp_initialize();
+
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
+        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
+    }
+
+    dataspaceId = H5Screate_simple(1, dims, 0);
+
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_NATIVE_FLOAT, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
+    statusFileInFunction = H5Dclose(datasetId);
+
+    H5Z_zfp_finalize();
+
+    statusFileInFunction = H5Sclose(dataspaceId);
+    statusFileInFunction = H5Pclose(plistId);
+}
+
+void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetName) 
+{
+    hid_t plistId;
+    hid_t dataspaceId;
+    hid_t datasetId;
+    herr_t statusFileInFunction;
+
+    hsize_t dims[1];
+    hsize_t cdims[1];
+
+    dims[0] = size;
+    cdims[0] = size;
+
+
+    plistId = H5Pcreate(H5P_DATASET_CREATE);
+    statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
+
+    H5Z_zfp_initialize();
+
+    if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
+        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+    } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
+        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+    } else {
+        std::cerr << "\nInvalid ZFP_MODE type\n";
+        return;
+    }
+
+    dataspaceId = H5Screate_simple(1, dims, 0);
+
+    datasetId = H5Dcreate2(fileId, dSetName, H5T_NATIVE_DOUBLE, dataspaceId, H5P_DEFAULT, plistId, H5P_DEFAULT);
+    statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
+    statusFileInFunction = H5Dclose(datasetId);
+
+    H5Z_zfp_finalize();
+
+    statusFileInFunction = H5Sclose(dataspaceId);
+    statusFileInFunction = H5Pclose(plistId);
+}
