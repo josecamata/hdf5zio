@@ -1,5 +1,5 @@
-#ifndef C818BBCA_66C0_4F0E_8BC0_F207B9B4878C
-#define C818BBCA_66C0_4F0E_8BC0_F207B9B4878C
+#ifndef HDF5WRITER_H
+#define HDF5WRITER_H
 
 #include "HDF5Base.h"
 
@@ -36,4 +36,4 @@ class HDF5Writer: public HDF5Base{
         void readConfigFile();
 };
 
-#endif /* C818BBCA_66C0_4F0E_8BC0_F207B9B4878C */
+#endif /* HDF5WRITER_H */

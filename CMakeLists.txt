@@ -12,7 +12,7 @@ include_directories(${HDF5_INCLUDE_DIRS})
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/hdf5ziolib/include)
-include_directories(/opt/lib/h5z_zfp/include)
+
 # Build the library
 add_subdirectory(hdf5ziolib)
 add_subdirectory(tests)

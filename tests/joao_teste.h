@@ -35,7 +35,7 @@ void testePadrao(){
     char name0[] = "testNC.h5";
     char name1[] = "testSZIP.h5";
     char name2[] = "testZLIB.h5";
-    int size = 100000000;
+    int size = 1000;
 
     //int *database = new int[size];
     unique_ptr<int> database(new int[size]);

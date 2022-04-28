@@ -1,5 +1,5 @@
-#ifndef F6158211_B632_4B28_83EE_11AA2B5C8C52
-#define F6158211_B632_4B28_83EE_11AA2B5C8C52
+#ifndef HDF5BASE_H
+#define HDF5BASE_H
 
 #include "hdf5.h"
 
@@ -16,4 +16,4 @@ class HDF5Base{
     private:
 };
 
-#endif /* F6158211_B632_4B28_83EE_11AA2B5C8C52 */
+#endif /* HDF5BASE_H */
