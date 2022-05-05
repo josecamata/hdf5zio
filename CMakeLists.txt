@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 cmake_policy(SET CMP0057 NEW)
+cmake_policy(SET CMP0028 NEW) 
 set(CMAKE_CXX_STANDARD 14)
 
 project(hdf5zio)
@@ -18,14 +19,11 @@ if(HDF5_FOUND)
 endif()
 
 if(ZFP_FOUND)
-  if(H5ZZFP_DIR)
-    set(H5ZZFP_INCLUDE_DIR ${H5ZZFP_DIR}/include)
-    set(H5ZZFP_LIBRARY ${H5ZZFP_DIR}/lib/libh5zzfp.a)
-    include_directories(${H5ZZFP_INCLUDE_DIR})
+  if(H5Z_ZFP_DIR)
+    include_directories(${H5Z_ZFP_DIR}/include)
    else()
-    message(FATAL_ERROR "H5ZZFP_DIR not set")
+    message(FATAL_ERROR "H5Z_ZFP_DIR not set")
    endif()
-  
     include_directories(${ZFP_INCLUDE_DIRS})
 endif()
 
@@ -34,8 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/hdf5ziolib/include)
 # Build the library
 add_subdirectory(hdf5ziolib)
 add_subdirectory(tests)
-#add_executable(HDF5zio-test tests/main.cpp)
-#target_link_libraries(HDF5zio-test PUBLIC HDF5zio ${HDF5_C_LIBRARIES})
+
 
 
 

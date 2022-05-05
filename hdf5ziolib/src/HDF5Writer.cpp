@@ -41,7 +41,16 @@ void HDF5Writer::readConfigFile() {
         if (this->zfp_mode == 2) { // zfp mode precision
             this->zfp_prec = ifile("zfp_precision", 5);
         }
+
+        
     }
+
+    H5Z_zfp_initialize();
+}
+
+HDF5Writer::~HDF5Writer() {
+    H5Z_zfp_finalize();
+    H5Fclose(fileId);
 }
 
 void HDF5Writer::write(int* dataBase, int size, const char* dSetName)
@@ -477,7 +486,7 @@ void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName)
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    H5Z_zfp_initialize();
+    
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
@@ -494,7 +503,7 @@ void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName)
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
     statusFileInFunction = H5Dclose(datasetId);
 
-    H5Z_zfp_finalize();
+    
 
     statusFileInFunction = H5Sclose(dataspaceId);
     statusFileInFunction = H5Pclose(plistId);
@@ -516,7 +525,7 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    H5Z_zfp_initialize();
+    //H5Z_zfp_initialize();
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
@@ -533,7 +542,7 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
     statusFileInFunction = H5Dclose(datasetId);
 
-    H5Z_zfp_finalize();
+    //H5Z_zfp_finalize();
 
     statusFileInFunction = H5Sclose(dataspaceId);
     statusFileInFunction = H5Pclose(plistId);
@@ -556,7 +565,7 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    H5Z_zfp_initialize();
+    //H5Z_zfp_initialize();
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
         statusFileInFunction = H5Pset_zfp_reversible(plistId);
@@ -573,7 +582,7 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
     statusFileInFunction = H5Dclose(datasetId);
 
-    H5Z_zfp_finalize();
+    //H5Z_zfp_finalize();
 
     statusFileInFunction = H5Sclose(dataspaceId);
     statusFileInFunction = H5Pclose(plistId);

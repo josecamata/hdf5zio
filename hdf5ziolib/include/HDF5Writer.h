@@ -8,6 +8,7 @@ typedef enum{NOCOMPRESSION = 0, SZIP, ZLIB, ZFP}CompressionType;
 class HDF5Writer: public HDF5Base{
     public:
         HDF5Writer(const char* fileName);
+        ~HDF5Writer();
         void writeHDF5();
         void write(int* dataBase, int size, const char* dSetName);
         void write(float* dataBase, int size, const char* dSetName);
