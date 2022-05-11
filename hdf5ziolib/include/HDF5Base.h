@@ -3,8 +3,7 @@
 
 #include "hdf5.h"
 
-#include "H5Zzfp_lib.h"
-#include "H5Zzfp_props.h"
+#include "H5Zzfp_plugin.h"
 
 class HDF5Base{
     public:

@@ -486,16 +486,19 @@ void HDF5Writer::writeChunckedZFP(int* dataBase, int size, const char* dSetName)
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    
+    unsigned int cd_values[10];
+    size_t cd_nelmts = 10;
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
-        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+        H5Pset_zfp_reversible_cdata(cd_nelmts, cd_values); // num_elements ??? values ???
     } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+        H5Pset_zfp_precision_cdata(this->zfp_prec, cd_nelmts, cd_values);
     } else {
         std::cerr << "\nInvalid ZFP_MODE type\n";
         return;
     }
+
+    H5Pset_filter(plistId, H5Z_FILTER_ZFP, H5Z_FLAG_MANDATORY, cd_nelmts, cd_values);
 
     dataspaceId = H5Screate_simple(1, dims, 0);
 
@@ -525,16 +528,19 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    //H5Z_zfp_initialize();
+    unsigned float cd_values[10];
+    size_t cd_nelmts = 10;
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
-        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+        H5Pset_zfp_reversible_cdata(cd_nelmts, cd_values); // num_elements ??? values ???
     } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+        H5Pset_zfp_precision_cdata(this->zfp_prec, cd_nelmts, cd_values);
     } else {
         std::cerr << "\nInvalid ZFP_MODE type\n";
         return;
     }
+
+    H5Pset_filter(plistId, H5Z_FILTER_ZFP, H5Z_FLAG_MANDATORY, cd_nelmts, cd_values);
 
     dataspaceId = H5Screate_simple(1, dims, 0);
 
@@ -565,16 +571,19 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    //H5Z_zfp_initialize();
+    unsigned double cd_values[10];
+    size_t cd_nelmts = 10;
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
-        statusFileInFunction = H5Pset_zfp_reversible(plistId);
+        H5Pset_zfp_reversible_cdata(cd_nelmts, cd_values); // num_elements ??? values ???
     } else if (this->zfp_mode == H5Z_ZFP_MODE_PRECISION) {
-        statusFileInFunction = H5Pset_zfp_precision(plistId, this->zfp_prec);
+        H5Pset_zfp_precision_cdata(this->zfp_prec, cd_nelmts, cd_values);
     } else {
         std::cerr << "\nInvalid ZFP_MODE type\n";
         return;
     }
+
+    H5Pset_filter(plistId, H5Z_FILTER_ZFP, H5Z_FLAG_MANDATORY, cd_nelmts, cd_values);
 
     dataspaceId = H5Screate_simple(1, dims, 0);
 
