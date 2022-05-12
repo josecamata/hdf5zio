@@ -22,7 +22,7 @@ void HDF5Writer::readConfigFile() {
 
     // Find config file
     std::ofstream configFile;
-    configFile.open("../config/config.pot", ios::app);
+    configFile.open("config.pot", ios::app);
     if (!configFile.is_open()) {
         std::cerr << "\nCreating default config file . . .\n";
         // TODO : Implementar criação de arquivo config
@@ -30,7 +30,7 @@ void HDF5Writer::readConfigFile() {
     }
     configFile.close();
 
-    GetPot ifile("../config/config.pot");
+    GetPot ifile("config.pot");
 
     int ct = ifile("compression_type", 0);
     this->c = (CompressionType) ct;
@@ -45,11 +45,11 @@ void HDF5Writer::readConfigFile() {
         
     }
 
-    H5Z_zfp_initialize();
+    //H5Z_zfp_initialize();
 }
 
 HDF5Writer::~HDF5Writer() {
-    H5Z_zfp_finalize();
+   // H5Z_zfp_finalize();
     H5Fclose(fileId);
 }
 
@@ -528,7 +528,7 @@ void HDF5Writer::writeChunckedZFP(float* dataBase, int size, const char* dSetNam
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    unsigned float cd_values[10];
+    unsigned cd_values[10];
     size_t cd_nelmts = 10;
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
@@ -571,7 +571,7 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
     plistId = H5Pcreate(H5P_DATASET_CREATE);
     statusFileInFunction = H5Pset_chunk(plistId, 1, cdims);
 
-    unsigned double cd_values[10];
+    unsigned cd_values[10];
     size_t cd_nelmts = 10;
 
     if (this->zfp_mode == H5Z_ZFP_MODE_REVERSIBLE) {
@@ -591,7 +591,6 @@ void HDF5Writer::writeChunckedZFP(double* dataBase, int size, const char* dSetNa
     statusFileInFunction = H5Dwrite(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
     statusFileInFunction = H5Dclose(datasetId);
 
-    //H5Z_zfp_finalize();
 
     statusFileInFunction = H5Sclose(dataspaceId);
     statusFileInFunction = H5Pclose(plistId);

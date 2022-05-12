@@ -49,6 +49,32 @@ int main(int argc, char* argv[])
     // SZIP
     // ZFP (lossless)
     // ZFP (precisão) 
+/*
+    GetPot cl(argc, argv);
+    if (cl.size() == 1 || cl.search("-h"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    if (!cl.search("-i"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    const std::string input = cl.next(std::string(""));
+
+    if (!cl.search("-o"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    const std::string output = cl.next(std::string(""));
+
+    */
+
 
     float m = +INFINITY;
     float M = -INFINITY;
@@ -59,21 +85,18 @@ int main(int argc, char* argv[])
 
     for (size_t i = 0; i < 500*500*100; i++)
     {
-        if(dataset[i] != 0)
-            std::cout<<dataset[i]<<std::endl;
+        //if(dataset[i] != 0)
+         //   std::cout<<dataset[i]<<std::endl;
         if(dataset[i] > M)
             M = dataset[i];
         if(dataset[i] < m)
             m = dataset[i];
     }
 
-    HDF5Writer hdf_cloud("dataset_cloud_24.h5");
-    hdf_cloud.write(dataset, 500*500*100, "dataset_cloud_24");
-    HDF5Writer hdf_cloud_z("dataset_cloud_24ZZZ.h5");
-    hdf_cloud_z.setCompression(ZLIB);
-    hdf_cloud_z.write(dataset, 500*500*100, "dataset_cloud_24");
+    HDF5Writer hdf_cloud(argv[2]);
+    hdf_cloud.write(dataset, 500*500*100, "cloud");
 
-    delete dataset;
+    delete [] dataset;
 
     std::cout<<"\n\nM = "<<M<<std::endl;
     std::cout<<"m = "<<m<<std::endl;

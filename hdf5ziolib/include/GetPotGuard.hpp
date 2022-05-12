@@ -28,7 +28,6 @@
 #ifndef __INCLUDE_GUARD_GETPOT__
 #define __INCLUDE_GUARD_GETPOT__
 
-
 // Interface Definition
 #include "GetPot.hpp"
 

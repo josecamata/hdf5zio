@@ -40,3 +40,14 @@ You have to have in your computer the following headers:
 3) The hdf5zio will work on my computer?
 
         If you meet all the requirements in the previous topic, yes, it will work.
+
+
+# Compilation 
+
+'''
+export HDF5_ROOT=<hdf5 install dir>
+cmake -B build -DZFP_DIR=<zfp install dir>  -DH5Z_ZFP_DIR=<h5z-zfp install dir>
+cmake --build build
+export HDF5_PLUGIN_PATH=<h5z-zfp install dir>/plugin
+''' 
+
