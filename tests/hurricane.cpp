@@ -1,14 +1,20 @@
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <string>
 #include <iomanip>
 #include <fstream>
 #include <cmath>
 #include <ctime>
 
+
 #include "HDF5Writer.h"
 #include "HDF5Reader.h"
+
+#include "GetPotGuard.hpp"
+
+
+
 
 void read_hurricane_data(const char* file_path, float* dataset)
 {
@@ -51,11 +57,13 @@ int main(int argc, char* argv[])
     // SZIP
     // ZFP (lossless)
     // ZFP (precisão) 
-/*
+
+    const int size = 500*500*100;
+
     GetPot cl(argc, argv);
     if (cl.size() == 1 || cl.search("-h"))
     {
-        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> -l <log_file> "<<std::endl;
         return 0;
     }
 
@@ -65,7 +73,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    const std::string input = cl.next(std::string(""));
+    std::string input = cl.next(std::string(""));
 
     if (!cl.search("-o"))
     {
@@ -73,75 +81,49 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    const std::string output = cl.next(std::string(""));
+    std::string output = cl.next("");
 
-    */
+    if (!cl.search("-l"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
 
+    std::string logfile = cl.next("");
 
-    std::ofstream log_file;
+    
 
-    // log_file.open(argv[4]);
+    std::ofstream log;
 
-    // std::cout<<argv[4]<<std::endl;
+    log.open(logfile);
+        
+    float* dataset = new float[size]; 
 
     std::clock_t c_start = std::clock();
-
-    float* dataset = new float[500*500*100]; //std::cout<<"\n\n"<<argv[1]<<std::endl;
-
-    read_hurricane_data(argv[1], dataset);
-
+    read_hurricane_data(input.c_str(), dataset);
     std::clock_t c_end = std::clock();
 
     long time_elapsed_ms_read_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
 
-    std::string file_name(argv[3]);
-    file_name = file_name.append(argv[2]);
-
-    const char* fileName = file_name.c_str();
 
     c_start = std::clock();
-
-    if(strcmp(argv[5], "0") == 0)
-    {
-        //std::cout<<"78"<<std::endl;
-        HDF5Writer hdf_cloud(fileName);
-        hdf_cloud.write(dataset, 500*500*100, "dataset_cloud");
-    }
-    else if(strcmp(argv[5], "1") == 0)
-    {
-        //std::cout<<"84"<<std::endl;
-        HDF5Writer hdf_cloud(fileName);
-        hdf_cloud.setCompression(SZIP); /* std::cout<<"---"<<std::endl; */
-        hdf_cloud.write(dataset, 500*500*100, "dataset_cloud_szip");
-    }
-    else if(strcmp(argv[5], "2") == 0)
-    {
-        //if(dataset[i] != 0)
-         //   std::cout<<dataset[i]<<std::endl;
-        if(dataset[i] > M)
-            M = dataset[i];
-        if(dataset[i] < m)
-            m = dataset[i];
-    }
+    HDF5Writer hdf_cloud(output.c_str());
+    hdf_cloud.write(dataset, size, "dataset_cloud");
     c_end = std::clock();
 
-    // std::cout<<argv[4]<<std::endl;
+    long time_elapsed_ms_write_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
 
-    HDF5Writer hdf_cloud(argv[2]);
-    hdf_cloud.write(dataset, 500*500*100, "cloud");
+    log <<"Read dataset:\n"; 
+    log << "CPU time used: " << time_elapsed_ms_read_to_dataset << " ms\n";
+    log << "CPU time used: " << time_elapsed_ms_read_to_dataset / 1000.0 << " s\n";
 
+    log <<"Write dataset:\n";
+    log << "CPU time used: " << time_elapsed_ms_write_to_dataset << " ms\n";
+    log << "CPU time used: " << time_elapsed_ms_write_to_dataset / 1000.0 << " s\n";
+    log.close();
+    
     delete [] dataset;
 
-    delete dataset;/* std::cout<<"106"<<std::endl; */
-
-    // log_file<<"Read dataset:\n"; std::cout<<"111"<<std::endl;
-    // log_file << "CPU time used: " << time_elapsed_ms_read_to_dataset << " ms\n";
-    // log_file << "CPU time used: " << time_elapsed_ms_read_to_dataset / 1000.0 << " s\n";
-
-    // log_file<<"Write dataset:\n";
-    // log_file << "CPU time used: " << time_elapsed_ms_write_to_dataset << " ms\n";
-    // log_file << "CPU time used: " << time_elapsed_ms_write_to_dataset / 1000.0 << " s\n";
-    // std::cout<<"115"<<std::endl;
     return 0;
 }
 
