@@ -3,6 +3,8 @@
 
 #include "hdf5.h"
 
+#include "H5Zzfp_plugin.h"
+
 class HDF5Base{
     public:
         HDF5Base(const char* fileName);

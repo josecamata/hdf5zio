@@ -51,6 +51,32 @@ int main(int argc, char* argv[])
     // SZIP
     // ZFP (lossless)
     // ZFP (precisão) 
+/*
+    GetPot cl(argc, argv);
+    if (cl.size() == 1 || cl.search("-h"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    if (!cl.search("-i"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    const std::string input = cl.next(std::string(""));
+
+    if (!cl.search("-o"))
+    {
+        std::cout<<"Usage: "<<argv[0]<<" -i <input> -o <output> "<<std::endl;
+        return 0;
+    }
+
+    const std::string output = cl.next(std::string(""));
+
+    */
+
 
     std::ofstream log_file;
 
@@ -90,22 +116,21 @@ int main(int argc, char* argv[])
     }
     else if(strcmp(argv[5], "2") == 0)
     {
-        //std::cout<<"91"<<std::endl;
-        HDF5Writer hdf_cloud(fileName);
-        hdf_cloud.setCompression(ZLIB); /* std::cout<<"---"<<std::endl; */
-        hdf_cloud.write(dataset, 500*500*100, "dataset_cloud_zlib");/* std::cout<<"---"<<std::endl; */
+        //if(dataset[i] != 0)
+         //   std::cout<<dataset[i]<<std::endl;
+        if(dataset[i] > M)
+            M = dataset[i];
+        if(dataset[i] < m)
+            m = dataset[i];
     }
     c_end = std::clock();
 
     // std::cout<<argv[4]<<std::endl;
 
-    long time_elapsed_ms_write_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    HDF5Writer hdf_cloud(argv[2]);
+    hdf_cloud.write(dataset, 500*500*100, "cloud");
 
-    // HDF5Writer hdf_cloud("dataset_cloud_24.h5");
-    // hdf_cloud.write(dataset, 500*500*100, "dataset_cloud_24");
-    // HDF5Writer hdf_cloud_z("dataset_cloud_24ZZZ.h5");
-    // hdf_cloud_z.setCompression(ZLIB);
-    // hdf_cloud_z.write(dataset, 500*500*100, "dataset_cloud_24");
+    delete [] dataset;
 
     delete dataset;/* std::cout<<"106"<<std::endl; */
 

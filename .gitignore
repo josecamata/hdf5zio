@@ -34,3 +34,8 @@
 
 
 build/ 
+tests/QCLOUDf38.bin
+tests/QCLOUDf38.bin.gz
+*.bin
+*.bin.gz
+.vscode/c_cpp_properties.json

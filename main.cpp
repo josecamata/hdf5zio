@@ -47,8 +47,9 @@ int main(void){
 
     myFile2.write(database, tam, "Compression Test");
 
-    // * Teste padrão de compressão 2 (com xdmf):
-    //testeXdmf();
+    HDF5Reader myFile("testSZIP.h5");
+    int *databas = new int[tam];
+    myFile.read("testSZIP.h5", databas, tam, "Compression Test");
 
 /***************************************************************/
     cout<<"Finished"<<endl;
