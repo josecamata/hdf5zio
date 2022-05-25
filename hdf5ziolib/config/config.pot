@@ -1,7 +1,0 @@
-# Compression Types: NOCOMPRESSION: 0, SZIP: 1, ZLIB: 2, ZFP: 3
-
-compression_type = 3;
-
-# ZFP MODES: 5 (REVERSIBLE) OR 2 (PRECISION MODE)
-zfp_mode = 2;
-zfp_precision = 4;

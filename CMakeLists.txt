@@ -29,6 +29,10 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/hdf5ziolib/include)
 
+configure_file(${PROJECT_SOURCE_DIR}/hdf5ziolib/config.h.in ${PROJECT_SOURCE_DIR}/hdf5ziolib/include/config.h) 
+set(CONFIG_DIR ${PROJECT_SOURCE_DIR}/hdf5ziolib/config/)
+configure_file(${PROJECT_SOURCE_DIR}/hdf5ziolib/config.h.in ${PROJECT_SOURCE_DIR}/hdf5ziolib/include/config.h) 
+
 # Build the library
 add_subdirectory(hdf5ziolib)
 add_subdirectory(tests)

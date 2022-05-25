@@ -8,6 +8,7 @@
 
 using namespace std;
 
+#include "config.h"
 #include "HDF5Writer.h"
 
 HDF5Writer::HDF5Writer(const char* fileName)
@@ -22,15 +23,17 @@ void HDF5Writer::readConfigFile() {
 
     // Find config file
     std::ofstream configFile;
-    configFile.open("config.pot", ios::app);
+    std::string config_file = CONFIG_DIR + std::string("config.pot");
+    configFile.open(config_file);
     if (!configFile.is_open()) {
         std::cerr << "\nCreating default config file . . .\n";
+        std::cerr << config_file << std::endl;
         // TODO : Implementar criação de arquivo config
         std::cerr << "\nNot yet implemented\n";
     }
     configFile.close();
 
-    GetPot ifile("config.pot");
+    GetPot ifile(config_file);
 
     int ct = ifile("compression_type", 0);
     this->c = (CompressionType) ct;
