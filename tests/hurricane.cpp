@@ -96,6 +96,7 @@ int main(int argc, char* argv[])
     read_hurricane_data(inputfile, dataset);
     std::clock_t c_end = std::clock();
 
+
     long time_elapsed_ms_read_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
 
 
@@ -104,7 +105,44 @@ int main(int argc, char* argv[])
     hdf_cloud.write(dataset, size, "dataset_cloud");
     c_end = std::clock();
 
+    HDF5Reader hdf_cloudreader(outputfile);
+    float* database = new float[size];
+    hdf_cloudreader.read(database, size, "dataset_cloud");
+
     long time_elapsed_ms_write_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+
+    log << "COMPRESSION: " << hdf_cloud.getCompression() << "\n";
+    log << "Difference (after compression - before compression): \n";
+    log << "Size: " << size << "\n";
+    log << "\n-------------------------------------\n\n";
+    log << "DATASET DIFFERENCE\n";
+    float diff = 0;
+    long double diff_avg = 0;
+    //float avg = 0;
+    for (size_t i = 0; i < size; i++) {
+        diff = database[i] - dataset[i];
+        log << dataset[i] << " " << database[i] << " " << diff << "\n";
+        if (!std::isnan(dataset[i])) {
+    //        avg += dataset[i];
+            diff_avg += abs(diff);
+        }
+    }
+    diff_avg = diff_avg / (long double) size;
+    //avg = avg / size;
+    /*
+    float variance = 0;
+    for (size_t i = 0; i < size; i++) {
+        if (!std::isnan(dataset[i])) {
+            variance += (dataset[i] - avg)*(dataset[i] - avg);
+        } 
+    }
+    variance = variance / size;
+    */
+    log << "Diff Average: " << diff_avg << "\n";
+    //log << "Average: " << avg << "\n";
+    //log << "Variance: " << variance << "\n";
+    //log << "Deviation: " << avg << " +- " << sqrt(variance) << "\n";
+    log << "\n-------------------------------------\n\n";
 
     log <<"Read dataset:\n"; 
     log << "CPU time used: " << time_elapsed_ms_read_to_dataset << " ms\n";
@@ -116,6 +154,7 @@ int main(int argc, char* argv[])
     log.close();
     
     delete [] dataset;
+    delete [] database;
 
     return 0;
 }

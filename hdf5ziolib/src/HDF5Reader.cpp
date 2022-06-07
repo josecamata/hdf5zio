@@ -17,7 +17,7 @@ HDF5Reader::HDF5Reader(const char* fileName) : HDF5Base(fileName)
     //do nothing
 }
 
-void HDF5Reader::read(const char *name, int* dataBase, int size, const char* dSetName) 
+void HDF5Reader::read(int* dataBase, int size, const char* dSetName) 
 {
 
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
@@ -39,26 +39,27 @@ void HDF5Reader::read(const char *name, int* dataBase, int size, const char* dSe
             switch (filter_type)
             {
             case H5Z_FILTER_DEFLATE :
-                cout<<"No compression"<<endl;
-                readNormal(name, dataBase, size, dSetName);
+                readNormal(dataBase, size, dSetName);
                 break;
             
             case H5Z_FILTER_SZIP:
-                cout<<"Szip"<<endl;
-                readChuncked(name, dataBase, size, dSetName);
+                readChuncked(dataBase, size, dSetName);
                 break;
 
+            case H5Z_FILTER_ZFP:
+                readChuncked(dataBase, size, dSetName);
+                break;
             default:
                 break;
             }
         }
     }
     else{
-        readNormal(name, dataBase, size, dSetName);
+        readNormal(dataBase, size, dSetName);
     }
 }
 
-void HDF5Reader::read(const char *name, float* dataBase, int size, const char* dSetName) 
+void HDF5Reader::read(float* dataBase, int size, const char* dSetName) 
 {
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
     H5Z_filter_t filter_type;
@@ -71,7 +72,7 @@ void HDF5Reader::read(const char *name, float* dataBase, int size, const char* d
     plist_id = H5Dget_create_plist(datasetId);
 
     numfilt = H5Pget_nfilters(plist_id);
-
+    
     if(numfilt != 0){
         for(i = 0; i < numfilt; i++){
             nelmts = 0;
@@ -80,13 +81,15 @@ void HDF5Reader::read(const char *name, float* dataBase, int size, const char* d
             switch (filter_type)
             {
             case H5Z_FILTER_DEFLATE :
-                cout<<"No compression"<<endl;
-                readNormal(name, dataBase, size, dSetName);
+                readNormal(dataBase, size, dSetName);
                 break;
             
             case H5Z_FILTER_SZIP:
-                cout<<"Szip"<<endl;
-                readChuncked(name, dataBase, size, dSetName);
+                readChuncked(dataBase, size, dSetName);
+                break;
+
+            case H5Z_FILTER_ZFP:
+                readChuncked(dataBase, size, dSetName);
                 break;
 
             default:
@@ -95,11 +98,11 @@ void HDF5Reader::read(const char *name, float* dataBase, int size, const char* d
         }
     }
     else{
-        readNormal(name, dataBase, size, dSetName);
+        readNormal(dataBase, size, dSetName);
     }
 }
 
-void HDF5Reader::read(const char *name, double* dataBase, int size, const char* dSetName) 
+void HDF5Reader::read(double* dataBase, int size, const char* dSetName) 
 {
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
     H5Z_filter_t filter_type;
@@ -122,26 +125,28 @@ void HDF5Reader::read(const char *name, double* dataBase, int size, const char* 
             switch (filter_type)
             {
             case H5Z_FILTER_DEFLATE :
-                cout<<"No compression"<<endl;
-                readNormal(name, dataBase, size, dSetName);
+                readNormal(dataBase, size, dSetName);
                 break;
             
             case H5Z_FILTER_SZIP:
-                cout<<"Szip"<<endl;
-                readChuncked(name, dataBase, size, dSetName);
+                readChuncked(dataBase, size, dSetName);
                 break;
 
+            case H5Z_FILTER_ZFP:
+                readChuncked(dataBase, size, dSetName);
+                break;
+            
             default:
                 break;
             }
         }
     }
     else{
-        readNormal(name, dataBase, size, dSetName);
+        readNormal(dataBase, size, dSetName);
     }
 }
 
-void HDF5Reader::readNormal(const char* name, int* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readNormal(int* dataBase, int size, const char* dSetName) 
 {
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
@@ -151,32 +156,21 @@ void HDF5Reader::readNormal(const char* name, int* dataBase, int size, const cha
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
-
     statusFileInTheFunction = H5Dclose(datasetId);
 }
 
-void HDF5Reader::readNormal(const char* name, float* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readNormal(float* dataBase, int size, const char* dSetName) 
 {
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
-
+    
     datasetId = H5Dopen2(fileId, dSetName, H5P_DEFAULT);
-
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
-
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
 
     statusFileInTheFunction = H5Dclose(datasetId);
 }
 
-void HDF5Reader::readNormal(const char* name, double* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readNormal(double* dataBase, int size, const char* dSetName) 
 {
     hid_t  datasetId; 
     herr_t statusFileInTheFunction;
@@ -185,55 +179,38 @@ void HDF5Reader::readNormal(const char* name, double* dataBase, int size, const 
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
 
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
-
     statusFileInTheFunction = H5Dclose(datasetId);
 }
 
-void HDF5Reader::readChuncked(const char* name, double* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readChuncked(double* dataBase, int size, const char* dSetName) 
 {
     
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
     herr_t statusFileInTheFunction;
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
 
     statusFileInTheFunction = H5Dclose(datasetId);
 }
 
-void HDF5Reader::readChuncked(const char* name, int* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readChuncked(int* dataBase, int size, const char* dSetName) 
 {
     
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
     herr_t statusFileInTheFunction;
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
 
     statusFileInTheFunction = H5Dclose(datasetId);
 }
 
-void HDF5Reader::readChuncked(const char* name, float* dataBase, int size, const char* dSetName) 
+void HDF5Reader::readChuncked(float* dataBase, int size, const char* dSetName) 
 {
     
     hid_t datasetId = H5Dopen(fileId, dSetName, H5P_DEFAULT);
     herr_t statusFileInTheFunction;
 
     statusFileInTheFunction = H5Dread(datasetId, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataBase);
-    for(int i = 0; i < size; i++){
-        cout<<dataBase[i]<<"   ";
-    }
-    cout<<endl;
 
     statusFileInTheFunction = H5Dclose(datasetId);
 }
