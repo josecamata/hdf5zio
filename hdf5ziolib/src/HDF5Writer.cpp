@@ -15,7 +15,6 @@ HDF5Writer::HDF5Writer(const char* fileName)
 : HDF5Base(fileName) 
 {
     this->readConfigFile();
-
     fileId = H5Fcreate(fileName, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 }
 
@@ -24,7 +23,7 @@ void HDF5Writer::readConfigFile() {
     // Find config file
     std::ofstream configFile;
     std::string config_file = CONFIG_DIR + std::string("config.pot");
-    configFile.open(config_file);
+    configFile.open(config_file, std::ios::app);
     if (!configFile.is_open()) {
         std::cerr << "\nCreating default config file . . .\n";
         std::cerr << config_file << std::endl;
@@ -54,6 +53,20 @@ void HDF5Writer::readConfigFile() {
 HDF5Writer::~HDF5Writer() {
    // H5Z_zfp_finalize();
     H5Fclose(fileId);
+}
+
+std::string HDF5Writer::getCompression() {
+    switch (this->c)
+    {
+        case ZLIB:
+            return "ZLIB";
+        case SZIP:
+            return "SZIP";
+        case ZFP:
+            return "ZFP";
+        default:
+            return "NO_COMPRESSION";
+    }
 }
 
 void HDF5Writer::write(int* dataBase, int size, const char* dSetName)

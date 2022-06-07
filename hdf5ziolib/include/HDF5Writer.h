@@ -14,6 +14,7 @@ class HDF5Writer: public HDF5Base{
         void write(float* dataBase, int size, const char* dSetName);
         void write(double* dataBase, int size, const char* dSetName);
         void setCompression(CompressionType c);
+        std::string getCompression();
     private:
         CompressionType c;
 
