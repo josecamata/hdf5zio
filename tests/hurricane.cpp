@@ -41,6 +41,18 @@ void read_hurricane_data(const char* file_path, float* dataset)
     int cont = 0;
     while(archive.read((char*)&dataset[cont], sizeof(float)))
     {
+
+        if(std::isnan(dataset[cont]))
+        {
+            dataset[cont] = 0.0f;
+            //lsstd::cout<<"NAN"<<std::endl;
+        }
+        else{
+            if(dataset[cont] < 0.0f || dataset[cont] > 1.0f)
+            {
+                dataset[cont] = 0.0f;
+            }
+        }
         cont++;
     }
 
@@ -59,6 +71,9 @@ int main(int argc, char* argv[])
     char *inputfile;
     char *outputfile;
     char  *logfile;
+    char  *begin_range;
+    char *end_range;
+    int  setup_begin = 0;
     
     if(argc == 1)
     {
@@ -66,7 +81,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    while( (c = getopt(argc, argv, "i:o:l:")) != -1)
+    while( (c = getopt(argc, argv, "i:o:l:be")) != -1)
     {
         switch(c)
         {
@@ -79,6 +94,13 @@ int main(int argc, char* argv[])
             case 'l':
                 logfile = optarg;
                 break;
+            case 'b':
+                begin_range = optarg;
+                setup_begin = 1;
+                break;
+            case 'e':
+                end_range = optarg;
+                break;
             default:
                 print_menu(argv[0]);
                 return 0;
@@ -90,6 +112,17 @@ int main(int argc, char* argv[])
 
     log.open(logfile);
         
+    float begin = -MAXFLOAT;
+    if(setup_begin)
+    {
+        begin = atof(begin_range);
+    }
+    float end = MAXFLOAT;
+    if(end_range)
+    {
+        end = atof(end_range);
+    }
+
     float* dataset = new float[size]; 
 
     std::clock_t c_start = std::clock();
@@ -117,32 +150,31 @@ int main(int argc, char* argv[])
     log << "\n-------------------------------------\n\n";
     log << "DATASET DIFFERENCE\n";
     float diff = 0;
-    long double diff_avg = 0;
-    //float avg = 0;
+    double diff_avg = 0;
+    double avg = 0;
     for (size_t i = 0; i < size; i++) {
         diff = database[i] - dataset[i];
-        log << dataset[i] << " " << database[i] << " " << diff << "\n";
         if (!std::isnan(dataset[i])) {
-    //        avg += dataset[i];
-            diff_avg += abs(diff);
+            avg      += dataset[i];
+            diff_avg += fabs(diff);
         }
     }
-    diff_avg = diff_avg / (long double) size;
-    //avg = avg / size;
-    /*
-    float variance = 0;
+    diff_avg = diff_avg / (float) size;
+    avg = avg / size;
+    
+    double variance = 0;
     for (size_t i = 0; i < size; i++) {
         if (!std::isnan(dataset[i])) {
             variance += (dataset[i] - avg)*(dataset[i] - avg);
         } 
     }
     variance = variance / size;
-    */
+    
     log << "Diff Average: " << diff_avg << "\n";
-    //log << "Average: " << avg << "\n";
-    //log << "Variance: " << variance << "\n";
-    //log << "Deviation: " << avg << " +- " << sqrt(variance) << "\n";
-    log << "\n-------------------------------------\n\n";
+    log << "Average: " << avg << "\n";
+    log << "Variance: " << variance << "\n";
+    log << "Deviation: " << avg << " +- " << sqrt(variance) << "\n";
+    log << "\n-------------------------------------\n";
 
     log <<"Read dataset:\n"; 
     log << "CPU time used: " << time_elapsed_ms_read_to_dataset << " ms\n";
