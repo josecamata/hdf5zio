@@ -20,10 +20,12 @@ void print_menu(const char* prog)
     std::cout<<"   -i [filename]  : Input file name"<<std::endl;
     std::cout<<"   -o [filename]  : Output file name"<<std::endl;
     std::cout<<"   -l [filename]  : log file name"<<std::endl;
+    std::cout<<"   -b [number]    : interval begin"<<std::endl;
+    std::cout<<"   -l [number]    : interval end"<<std::endl;
 }
 
 
-void read_hurricane_data(const char* file_path, float* dataset)
+void read_hurricane_data(const char* file_path, float* dataset, float begin, float end)
 {
     int nx = 500;
     int ny = 500;
@@ -48,7 +50,7 @@ void read_hurricane_data(const char* file_path, float* dataset)
             //lsstd::cout<<"NAN"<<std::endl;
         }
         else{
-            if(dataset[cont] < 0.0f || dataset[cont] > 1.0f)
+            if(dataset[cont] < begin || dataset[cont] > end)
             {
                 dataset[cont] = 0.0f;
             }
@@ -64,8 +66,6 @@ void read_hurricane_data(const char* file_path, float* dataset)
 
 int main(int argc, char* argv[])
 {
-
-
     const int size = 500*500*100;
     char c; 
     char *inputfile;
@@ -74,6 +74,7 @@ int main(int argc, char* argv[])
     char  *begin_range;
     char *end_range;
     int  setup_begin = 0;
+    int setup_end = 0;
     
     if(argc == 1)
     {
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    while( (c = getopt(argc, argv, "i:o:l:be")) != -1)
+    while( (c = getopt(argc, argv, "i:o:l:b:e:")) != -1)
     {
         switch(c)
         {
@@ -100,6 +101,7 @@ int main(int argc, char* argv[])
                 break;
             case 'e':
                 end_range = optarg;
+                setup_end = 1;
                 break;
             default:
                 print_menu(argv[0]);
@@ -110,7 +112,7 @@ int main(int argc, char* argv[])
 
     std::ofstream log;
 
-    log.open(logfile);
+    log.open(logfile, std::ofstream::app);
         
     float begin = -MAXFLOAT;
     if(setup_begin)
@@ -118,7 +120,7 @@ int main(int argc, char* argv[])
         begin = atof(begin_range);
     }
     float end = MAXFLOAT;
-    if(end_range)
+    if(setup_end)
     {
         end = atof(end_range);
     }
@@ -126,7 +128,7 @@ int main(int argc, char* argv[])
     float* dataset = new float[size]; 
 
     std::clock_t c_start = std::clock();
-    read_hurricane_data(inputfile, dataset);
+    read_hurricane_data(inputfile, dataset, begin, end);
     std::clock_t c_end = std::clock();
 
 
@@ -141,6 +143,11 @@ int main(int argc, char* argv[])
     HDF5Reader hdf_cloudreader(outputfile);
     float* database = new float[size];
     hdf_cloudreader.read(database, size, "dataset_cloud");
+
+    log << "\n-------------------------------------";
+    log << "\n-------------------------------------";
+    log << "\n-------------------------------------\n\n";
+    log << "INPUT FILE: " << inputfile << "\n";
 
     long time_elapsed_ms_write_to_dataset = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
 
